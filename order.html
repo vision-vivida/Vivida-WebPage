@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vivida - Order</title>
+    <link rel="icon" href="./vivida.png" />
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/order.css" />
+  </head>
+  <body>
+    <header class="simple-header container">
+      <a href="./" class="brand">
+        <img src="./vivida.png" alt="Vivida" class="logo" />
+        <span class="brand-name">Vivida</span>
+      </a>
+    </header>
+
+    <main class="container order-container">
+      <div class="order-summary-card">
+        <h2>Order Summary</h2>
+        <div id="selectedProduct" class="selected-product"></div>
+        <div id="upiQRWrap" class="upi-qr hidden">
+          <h3>Pay via UPI</h3>
+          <div id="upiQR"></div>
+          <p id="upiNote" class="form-note"></p>
+        </div>
+      </div>
+
+      <div class="order-form-card">
+        <h2>Your Details</h2>
+        <form id="orderForm">
+          <div class="form-grid">
+            <div class="field">
+              <label for="fullName">Full Name</label>
+              <input id="fullName" name="fullName" type="text" placeholder="Jane Doe" required />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="jane@example.com" required />
+            </div>
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" placeholder="+1 555 123 4567" required />
+            </div>
+            <div class="field">
+              <label for="address">Address</label>
+              <input id="address" name="address" type="text" placeholder="123 Main St, City" required />
+            </div>
+            <div class="field">
+              <label for="size">Fit / Size</label>
+              <select id="size" name="size" required>
+                <option value="A4">A4</option>
+                <option value="A3">A3</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="quantity">Quantity</label>
+              <input id="quantity" name="quantity" type="number" value="1" min="1" required />
+            </div>
+          </div>
+
+          <fieldset class="field">
+            <legend>Payment Method</legend>
+            <label class="radio">
+              <input type="radio" name="payment" value="UPI" required />
+              <span>UPI</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="payment" value="Cash on Delivery" required />
+              <span>Cash on Delivery</span>
+            </label>
+          </fieldset>
+
+          <button type="submit" class="btn primary">Place Order</button>
+          <p id="orderStatus" class="form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <p>© <span id="copyrightYear"></span> Vivida. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/posters-manifest.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script src="assets/js/order.js"></script>
+    <script>
+      document.getElementById('copyrightYear').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html> 

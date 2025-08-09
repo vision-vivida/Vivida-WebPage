@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vivida - My Orders</title>
+    <link rel="icon" href="./vivida.png" />
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/order.css" />
+  </head>
+  <body>
+    <header class="simple-header container">
+      <a href="./" class="brand">
+        <img src="./vivida.png" alt="Vivida" class="logo" />
+        <span class="brand-name">Vivida</span>
+      </a>
+    </header>
+
+    <main class="container" style="margin:1rem auto 2rem auto;">
+      <h2>My Orders</h2>
+      <div id="ordersList" style="display:grid;gap:.8rem"></div>
+      <p id="ordersNote" class="form-note"></p>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <p>© <span id="copyrightYear"></span> Vivida. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <script>
+      document.getElementById('copyrightYear').textContent = new Date().getFullYear();
+      const user = window.VividaAuth.getCurrentUser();
+      if(!user){ location.href = 'auth.html?redirect=my-orders.html'; }
+      const orders = window.VividaStorage.getOrders().filter(o => (o.customer?.email || o.userEmail) === user.email);
+      const host = document.getElementById('ordersList');
+      const note = document.getElementById('ordersNote');
+      if(orders.length === 0){ note.textContent = 'No orders yet.'; }
+      const fmt = (d)=> new Date(d).toLocaleDateString();
+      const fmtInr = (v)=> `₹${Number(v).toFixed(0)}`;
+      orders.forEach(o => {
+        const el = document.createElement('article');
+        el.className = 'order-summary-card';
+        const eta = o.expectedDeliveryAt ? fmt(o.expectedDeliveryAt) : '—';
+        el.innerHTML = `
+          <div style="display:flex;align-items:center;gap:.8rem;">
+            <img src="${o.item?.src}" alt="${o.item?.name}" style="width:64px;height:64px;object-fit:cover;border-radius:8px"/>
+            <div>
+              <strong>#${o.orderId}</strong> • ${fmt(o.createdAt)} • ${o.item?.name}
+              <div class="form-note">${o.size} • Qty ${o.quantity} • ${fmtInr(o.totalINR)} • Status: ${o.status}
+                <br/>Expected delivery: ${eta}
+              </div>
+            </div>
+          </div>
+        `;
+        host.appendChild(el);
+      });
+    </script>
+  </body>
+</html> 

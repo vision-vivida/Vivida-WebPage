@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vivida - Sign In</title>
+    <link rel="icon" href="./vivida.png" />
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/auth.css" />
+  </head>
+  <body>
+    <main class="container auth-container">
+      <section class="card">
+        <div class="tabs">
+          <button class="tab active" data-tab="login">Login</button>
+          <button class="tab" data-tab="signup">Create Account</button>
+        </div>
+        <div class="tab-panels">
+          <form id="loginForm" class="panel active">
+            <div class="field">
+              <label for="login_email">Email</label>
+              <input id="login_email" name="email" type="email" required />
+            </div>
+            <div class="field">
+              <label for="login_password">Password</label>
+              <input id="login_password" name="password" type="password" required />
+            </div>
+            <button type="submit" class="btn primary">Login</button>
+            <p id="loginStatus" class="form-note" aria-live="polite"></p>
+          </form>
+          <form id="signupForm" class="panel">
+            <div class="field">
+              <label for="su_name">Full Name</label>
+              <input id="su_name" name="fullName" type="text" required />
+            </div>
+            <div class="field">
+              <label for="su_email">Email</label>
+              <input id="su_email" name="email" type="email" required />
+            </div>
+            <div class="field">
+              <label for="su_password">Password</label>
+              <input id="su_password" name="password" type="password" minlength="4" required />
+            </div>
+            <button type="submit" class="btn primary">Create Account</button>
+            <p id="signupStatus" class="form-note" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script src="assets/js/auth.js"></script>
+    <script>
+      const tabs = document.querySelectorAll('.tab');
+      const panels = document.querySelectorAll('.panel');
+      tabs.forEach(btn => btn.addEventListener('click', () => {
+        tabs.forEach(b=>b.classList.remove('active'));
+        panels.forEach(p=>p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab + 'Form').classList.add('active');
+      }));
+
+      const params = new URLSearchParams(location.search);
+      const redirectTo = params.get('redirect') || './';
+
+      document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const f = e.currentTarget;
+        try{
+          window.VividaAuth.login({ email: f.email.value, password: f.password.value });
+          location.href = redirectTo;
+        }catch(err){ document.getElementById('loginStatus').textContent = err.message; }
+      });
+
+      document.getElementById('signupForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const f = e.currentTarget;
+        try{
+          window.VividaAuth.signUp({ fullName: f.fullName.value, email: f.email.value, password: f.password.value });
+          location.href = redirectTo;
+        }catch(err){ document.getElementById('signupStatus').textContent = err.message; }
+      });
+    </script>
+  </body>
+</html> 
